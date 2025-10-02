@@ -1,0 +1,2049 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Teknoluvas - Cotações</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+     
+     
+    <style>
+                /* CSS Reset e Configurações Globais */
+        :root {
+            --color-primary: #ef4444; /* vermelho */
+            --color-primary-dark: #dc2626;
+            --color-secondary: #3b82f6; /* azul */
+            --color-text-primary: #1f2937; /* cinza escuro */
+            --color-text-secondary: #4b5563; /* cinza médio */
+            --color-background-light: #f3f4f6; /* cinza claro */
+            --color-white: #ffffff;
+            --color-error: #dc2626; /* vermelho escuro para erros */
+            --font-family-sans: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-family-sans);
+            background-color: var(--color-background-light);
+            color: var(--color-text-primary);
+            line-height: 1.6;
+        }
+
+        /* Utilitários */
+        .container {
+            width: 100%;
+            max-width: 1140px;
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+        }
+
+        .section-padding {
+            padding-top: 5rem;
+            padding-bottom: 5rem;
+        }
+        
+        .text-center {
+            text-align: center;
+        }
+
+        .section-title {
+            font-size: 2.25rem;
+            font-weight: 800;
+            margin-bottom: 3rem;
+        }
+        
+        .section-title .highlight, .subsection-title .highlight {
+             color: var(--color-primary);
+        }
+        
+        .subsection-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+        
+        .related-products {
+            margin-top: 4rem;
+            padding: 3rem 2rem;
+            border-radius: 0.75rem;
+        }
+        
+        .related-products-bg-1 { background-color: #f9fafb; }
+        .related-products-bg-2 { background-color: #eff6ff; }
+        .related-products-bg-3 { background-color: #f0fdf4; }
+        .related-products-bg-4 { background-color: #fffbeb; }
+
+        .gradient-text {
+            background-image: linear-gradient(to right, #ef4444, #3b82f6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .btn {
+            display: inline-block;
+            font-weight: 700;
+            padding: 0.75rem 2rem;
+            border-radius: 9999px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            font-size: 0.875rem;
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: scale(1);
+        }
+
+        .btn-primary {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background-color: var(--color-primary-dark);
+            transform: scale(1.05);
+        }
+        
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--color-primary);
+            border: 2px solid var(--color-primary);
+        }
+        
+        .btn-secondary:hover:not(:disabled) {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+        }
+        
+        .btn-basto {
+            background-color:gray;
+            color: var(--color-white);
+        }
+
+        .btn-basto:hover:not(:disabled) {
+            background-color: gray;
+            transform: scale(1.05);
+        }
+
+        /* Animação de Rolagem */
+        .scroll-animate {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            will-change: opacity, transform;
+        }
+
+        .scroll-animate.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+
+        /* Estilos do Header */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        header nav.container {
+            display: flex;
+            align-items: center;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        .nav-menu-wrapper {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+            gap: 1rem;
+        }
+
+        .nav-links {
+            display: none; /* Oculto em telas pequenas */
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            position: relative;
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            padding-bottom: 0.25rem;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            transform: scaleX(0);
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--color-primary);
+            transform-origin: bottom right;
+            transition: transform 0.25s ease-out;
+        }
+
+        .nav-links a:hover {
+            color: var(--color-text-primary);
+        }
+        
+        .nav-links a:hover::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+        
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .cart-toggle, .menu-toggle {
+            position: relative;
+            display: block;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 9999px;
+            transition: background-color 0.2s ease-in-out;
+        }
+
+        .cart-toggle:hover, .menu-toggle:hover {
+            background-color: rgba(0,0,0,0.05);
+        }
+        
+        .cart-toggle .icon, .menu-toggle .icon {
+            width: 1.5rem;
+            height: 1.5rem;
+            color: var(--color-text-secondary);
+        }
+        
+        .cart-badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background-color: var(--color-primary);
+            color: var(--color-white);
+            border-radius: 50%;
+            width: 1.25rem;
+            height: 1.25rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: scale(0);
+            transition: transform 0.2s ease;
+        }
+        
+        .cart-badge.visible {
+            transform: scale(1);
+        }
+
+        /* Menu Mobile Animado */
+        .mobile-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background-color: var(--color-white);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+            padding: 1rem 1.5rem;
+            border-top: 1px solid #e5e7eb;
+            opacity: 0;
+            transform: translateY(-10px);
+            pointer-events: none;
+            visibility: hidden;
+            transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+        }
+
+        .mobile-menu.active {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+            visibility: visible;
+        }
+        
+        .mobile-menu a {
+            display: block;
+            text-align: center;
+            padding: 0.75rem 0;
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            border-radius: 0.375rem;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        
+        .mobile-menu a:hover {
+            background-color: #e5e7eb;
+            color: var(--color-text-primary);
+        }
+
+        /* Estilos do Hero */
+        .hero-section {
+            background-color: var(--color-white);
+            min-height: calc(100vh - 80px); /* Adjust based on header height */
+            display: flex;
+            align-items: center;
+        }
+        
+        .hero-content {
+            display: flex;
+            flex-direction: column-reverse;
+            align-items: center;
+            gap: 3rem;
+        }
+        
+        .hero-text {
+            text-align: center;
+        }
+        
+        .hero-text h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+        
+        .hero-text p {
+            font-size: 1.125rem;
+            color: var(--color-text-secondary);
+            max-width: 42rem;
+            margin: 0 auto 2rem;
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 0.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            transition: transform 0.5s ease;
+        }
+
+        .hero-image img:hover {
+             transform: scale(1.05);
+        }
+
+        /* Keyframes for the scroll animation */
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Logo Carousel Section */
+        .logo-carousel-section {
+            background-color: var(--color-white);
+            padding-top: 3rem;
+            padding-bottom: 3rem;
+        }
+
+        .logo-carousel {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+            mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent 100%);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent 100%);
+        }
+
+        .logo-carousel-track {
+            display: flex;
+            width: calc(200px * 14); /* (logo-slide width) * (number of logos * 2) */
+            animation: scroll 35s linear infinite;
+        }
+
+        .logo-carousel:hover .logo-carousel-track {
+            animation-play-state: paused;
+        }
+
+        .logo-slide {
+            flex-shrink: 0;
+            width: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0 1rem;
+        }
+
+        .logo-slide img {
+            max-width: 120px;
+            height: auto;
+            filter: grayscale(100%);
+            opacity: 0.6;
+            transition: filter 0.3s ease, opacity 0.3s ease;
+        }
+        
+        .logo-slide:hover img {
+            filter: grayscale(0%);
+            opacity: 1;
+        }
+
+        /* Estilos das Seções de Features (Sobre, FeatureOne, FeatureTwo) */
+        .feature-section {
+            background-color: var(--color-white);
+        }
+        
+        .feature-section.alt-bg {
+             background-color: var(--color-background-light);
+        }
+
+        .feature-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3rem;
+        }
+        
+        .feature-image, .feature-text {
+            width: 100%;
+        }
+
+        .feature-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        
+        .feature-text h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .feature-text p {
+            color: var(--color-text-secondary);
+            margin-bottom: 1rem;
+            line-height: 1.75;
+        }
+        
+        .feature-list {
+            list-style: none;
+            margin-top: 1.5rem;
+            display: grid;
+            gap: 1rem;
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            color: var(--color-text-secondary);
+        }
+
+        .feature-list .icon {
+            width: 1.25rem;
+            height: 1.25rem;
+            color: var(--color-primary);
+            flex-shrink: 0;
+            margin-top: 0.125rem; /* Ajuste vertical */
+        }
+
+
+        /* Estilos da Seção de Produtos */
+        .products-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+        
+        .product-card {
+            background-color: var(--color-white);
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-0.5rem);
+        }
+        
+        .product-card img {
+            width: auto;
+            height: auto;
+            object-fit: cover;
+        }
+        
+        .product-card-content {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+        
+        .product-card-content h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .product-card-content p {
+            color: var(--color-text-secondary);
+            flex-grow: 1;
+            margin-bottom: 1rem;
+        }
+        
+        .product-card-content .price {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 1rem;
+        }
+
+        .product-card-content .btn {
+            margin-top: auto;
+            text-align: center;
+        }
+        
+        /* Estilos do Carrossel */
+        .carousel-section {
+            padding-top: 5rem;
+            padding-bottom: 5rem;
+        }
+
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            overflow: hidden;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        
+        .carousel-slides {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+        
+        .carousel-slide {
+            min-width: 100%;
+            position: relative;
+        }
+        
+        .carousel-slide img {
+            width: 100%;
+            display: block;
+            height: 60vh;
+            object-fit: cover;
+        }
+        
+        .carousel-slide-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+            color: var(--color-white);
+            padding: 3rem 2rem 2rem;
+        }
+        
+        .carousel-slide-caption h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0;
+        }
+        
+        .carousel-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(255, 255, 255, 0.7);
+            border: none;
+            border-radius: 50%;
+            width: 3rem;
+            height: 3rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            transition: background-color 0.3s ease;
+        }
+        
+        .carousel-button:hover {
+            background-color: var(--color-white);
+        }
+        
+        .carousel-button.prev {
+            left: 1rem;
+        }
+
+        .carousel-button.next {
+            right: 1rem;
+        }
+
+        .carousel-button .icon {
+            width: 1.5rem;
+            height: 1.5rem;
+            color: var(--color-text-primary);
+        }
+        
+        .carousel-dots {
+            position: absolute;
+            bottom: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 0.75rem;
+            z-index: 10;
+        }
+        
+        .carousel-dot {
+            width: 0.75rem;
+            height: 0.75rem;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.5);
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .carousel-dot.active {
+            background-color: var(--color-white);
+        }
+        
+        /* Estilos do Drawer (Orçamento) */
+        .drawer-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 998;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s;
+        }
+        
+        .drawer-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .drawer {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 100%;
+            max-width: 400px;
+            height: 100%;
+            background-color: var(--color-white);
+            box-shadow: -2px 0 8px rgba(0, 0, 0, 0.15);
+            z-index: 999;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .drawer.active {
+            transform: translateX(0);
+        }
+
+        .drawer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .drawer-header h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .drawer-close-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.25rem;
+        }
+        
+        .drawer-close-button .icon {
+            width: 1.5rem;
+            height: 1.5rem;
+            color: var(--color-text-secondary);
+        }
+        
+        .drawer-body {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+        }
+
+        /* Estilos do Orçamento */
+        .cart-empty-message {
+            text-align: center;
+            color: var(--color-text-secondary);
+            padding-top: 4rem;
+        }
+
+        .cart-items {
+            list-style: none;
+        }
+        
+        .cart-item {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            padding-bottom: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .cart-item-image {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 0.375rem;
+        }
+        
+        .cart-item-details {
+            flex-grow: 1;
+        }
+        
+        .cart-item-details h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .cart-item-details .price {
+            color: var(--color-text-secondary);
+            font-size: 0.875rem;
+        }
+        
+        .cart-item-quantity {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        
+        .quantity-btn {
+            background-color: #e5e7eb;
+            border: none;
+            border-radius: 50%;
+            width: 1.75rem;
+            height: 1.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .quantity-btn:hover {
+            background-color: #d1d5db;
+        }
+        
+        .cart-item-subtotal {
+            font-weight: 700;
+        }
+
+        .cart-footer {
+            padding: 1.5rem;
+            border-top: 1px solid #e5e7eb;
+        }
+        
+        .budget-observations textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            font-size: 1rem;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 80px;
+            margin-top: 1rem;
+        }
+
+        #guest-info-form .form-group {
+            margin-bottom: 0.75rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.25rem;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            font-size: 1rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
+        }
+
+        .form-group input.invalid {
+            border-color: var(--color-error);
+            box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.2);
+        }
+
+        .form-error-message {
+            color: var(--color-error);
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-top: 0.25rem;
+            min-height: 1.2em; /* Reserve space to prevent layout shift */
+        }
+
+
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+        
+        .cart-checkout-button {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1rem;
+        }
+
+        /* Estilos do Footer */
+        footer {
+            background-color: var(--color-text-primary);
+            color: #d1d5db; /* Lighter gray text */
+            padding-top: 5rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 3rem;
+        }
+
+        .footer-column .logo {
+            display: inline-block;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        .footer-column > p {
+            color: #9ca3af;
+            line-height: 1.7;
+            max-width: 320px;
+        }
+
+        .footer-column h4 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--color-white);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li:not(:last-child) {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-links a {
+            color: #9ca3af;
+            text-decoration: none;
+            transition: color 0.3s ease, padding-left 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--color-primary);
+            padding-left: 0.5rem;
+        }
+
+        .newsletter-form {
+            display: flex;
+            margin-top: 1.5rem;
+        }
+
+        .newsletter-form input[type="email"] {
+            flex-grow: 1;
+            min-width: 0;
+            padding: 0.75rem 1rem;
+            border: 1px solid #4b5563;
+            background-color: #374151;
+            color: var(--color-white);
+            border-radius: 0.375rem 0 0 0.375rem;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .newsletter-form input[type="email"]:focus {
+            border-color: var(--color-primary);
+        }
+
+        .newsletter-form button {
+            font-weight: 600;
+            padding: 0.75rem 1rem;
+            border: none;
+            background-color: var(--color-primary);
+            color: var(--color-white);
+            cursor: pointer;
+            border-radius: 0 0.375rem 0.375rem 0;
+            transition: background-color 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .newsletter-form button:hover {
+            background-color: var(--color-primary-dark);
+        }
+
+        .footer-column .social-links {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .footer-column .social-links a {
+            color: #9ca3af;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .footer-column .social-links a:hover {
+            color: var(--color-white);
+            transform: translateY(-2px);
+        }
+        
+        .footer-column .social-links a[aria-label="Instagram"]:hover {
+            color: #E4405F; /* Instagram Pink */
+        }
+        .footer-column .social-links a[aria-label="Facebook"]:hover {
+            color: #1877F2; /* Facebook Blue */
+        }
+        .footer-column .social-links a[aria-label="WhatsApp"]:hover {
+            color: #25D366; /* WhatsApp Green */
+        }
+
+        .footer-column .social-links .icon {
+            width: 1.5rem;
+            height: 1.5rem;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #374151;
+            padding: 2rem 0;
+            margin-top: 4rem;
+            text-align: center;
+        }
+
+        .footer-bottom p {
+            font-size: 0.875rem;
+            color: #9ca3af;
+            margin: 0;
+        }
+
+        /* Media Queries para Responsividade */
+        @media (min-width: 768px) {
+            /* Header */
+            .nav-links {
+                display: flex;
+            }
+            .menu-toggle {
+                display: none;
+            }
+
+            /* Hero */
+            .hero-content {
+                flex-direction: row;
+                gap: 3rem;
+            }
+            .hero-text {
+                text-align: left;
+                width: 50%;
+            }
+            .hero-image {
+                width: 50%;
+            }
+            .hero-text h1 {
+                font-size: 3.75rem;
+            }
+            .hero-text p {
+                margin-left: 0;
+                margin-right: 0;
+            }
+            
+            /* Features */
+            .feature-content {
+                 flex-direction: row;
+            }
+            .feature-content.reverse {
+                flex-direction: row-reverse;
+            }
+            .feature-image, .feature-text {
+                width: 50%;
+            }
+            .feature-list {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem 2rem; /* espaçamento de linha e coluna */
+            }
+            
+            /* Produtos */
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            /* Footer */
+             .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 4rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            /* Produtos */
+            .products-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            /* Footer */
+            .footer-grid {
+                grid-template-columns: 3fr 2fr 2fr 3fr;
+            }
+        }
+    </style>
+
+
+</head>
+
+<body>
+    
+    <!-- ============================================= -->
+    <!--                    HEADER                     -->
+    <!-- ============================================= -->
+    <header>
+        <nav class="container">
+            <a href="#home" class="logo gradient-text">Teknoluvas</a>
+            
+            <div class="nav-menu-wrapper">
+                <!-- Links para Desktop -->
+                <div class="nav-links">
+                    <a href="#home">     Início      </a>
+                    <a href="#solucoes"> Soluções    </a>
+                    <a href="#cabeça">   Cabeça      </a>
+                    <a href="#tronco">   Tronco      </a>
+                    <a href="#ia">       IA & Dados  </a>
+                </div>
+
+                <div class="header-controls">
+                    <!-- Botão do Orçamento -->
+                    <button id="cart-button" class="cart-toggle" aria-label="Abrir orçamento" aria-controls="cart-drawer">
+                        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                        <span id="cart-badge" class="cart-badge">0</span>
+                    </button>
+
+                    <!-- Botão do Menu Mobile -->
+                    <button id="menu-button" class="menu-toggle" aria-label="Abrir menu" aria-controls="mobile-menu" aria-expanded="false">
+                        <svg id="menu-open-icon" class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                        <svg id="menu-close-icon" class="icon" style="display: none;" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </nav>
+        <!-- Menu Mobile -->
+        <div id="mobile-menu" class="mobile-menu">
+            <a href="#home">      Início      </a>
+            <a href="#solucoes">  Soluções    </a>
+            <a href="#ia">        IA & Dados  </a>
+
+        </div>
+    </header>
+
+    <main>
+        <!-- ============================================= -->
+        <!--                  HERO SECTION                 -->
+        <!-- ============================================= -->
+        <section id="home" class="hero-section section-padding">
+            <div class="container">
+
+                <div class="hero-content">
+                    <div class="hero-text scroll-animate">
+                        <h1>Melhores <span class="gradient-text">Equipamentos de Segurança.</span></h1>
+                        <p>Os melhores EPI's do mercado para sua segurança feitos com tecnologia de ponta e com certificação.</p>
+                        <a href="https://api.whatsapp.com/send/?phone=5514991122754&text&type=phone_number&app_absent=0" class="btn btn-primary">Saiba Mais</a>
+                    </div>
+
+                    <div class="hero-image scroll-animate">
+                        <img src="epi´s.png">
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================= -->
+        <!--                  LOGO CAROUSEL                -->
+        <!-- ============================================= -->
+        <section class="logo-carousel-section">
+            <div class="container">
+                <h3 class="text-center scroll-animate" style="color: var(--color-text-secondary); font-weight: 500; margin-bottom: 2rem;">Nossos Clientes</h3>
+                <div class="logo-carousel scroll-animate">
+                    <div class="logo-carousel-track">
+
+                        <!-- Logos (Set 1) -->
+                        <div class="logo-slide"><img src="https://placehold.co/150x50/e2e8f0/475569?text=React"     alt="Logo da React">    </div>
+                        <div class="logo-slide"><img src="https://placehold.co/150x50/e2e8f0/475569?text=Node.js"   alt="Logo da Node.js">  </div>
+                        <div class="logo-slide"><img src="https://placehold.co/150x50/e2e8f0/475569?text=AWS"       alt="Logo da AWS">      </div>
+                        <div class="logo-slide"><img src="https://placehold.co/150x50/e2e8f0/475569?text=Next.js"   alt="Logo da Next.js">  </div>
+                        <div class="logo-slide"><img src="https://placehold.co/150x50/e2e8f0/475569?text=Figma"     alt="Logo da Figma">    </div>
+                        <div class="logo-slide"><img src="https://placehold.co/150x50/e2e8f0/475569?text=Stripe"    alt="Logo da Stripe">   </div>
+                        <div class="logo-slide"><img src="https://placehold.co/150x50/e2e8f0/475569?text=Vercel"    alt="Logo da Vercel">   </div>
+                        
+                        <!-- Logos (Set 2 for infinite loop) -->
+                        <div class="logo-slide"><img src="https://placehold.co/150x50/e2e8f0/475569?text=React"     alt="Logo da React">    </div>
+                        <div class="logo-slide"><img src="https://placehold.co/150x50/e2e8f0/475569?text=Node.js"   alt="Logo da Node.js">  </div>
+                        <div class="logo-slide"><img src="https://placehold.co/150x50/e2e8f0/475569?text=AWS"       alt="Logo da AWS">      </div>
+                        <div class="logo-slide"><img src="https://placehold.co/150x50/e2e8f0/475569?text=Next.js"   alt="Logo da Next.js">  </div>
+                        <div class="logo-slide"><img src="https://placehold.co/150x50/e2e8f0/475569?text=Figma"     alt="Logo da Figma">    </div>
+                        <div class="logo-slide"><img src="https://placehold.co/150x50/e2e8f0/475569?text=Stripe"    alt="Logo da Stripe">   </div>
+                        <div class="logo-slide"><img src="https://placehold.co/150x50/e2e8f0/475569?text=Vercel"    alt="Logo da Vercel">   </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ============================================= -->
+        <!--              FEATURE SECTION 1                -->
+        <!-- ============================================= -->
+        <section id="solucoes" class="feature-section section-padding">
+            <div class="container">
+                <h2 class="section-title text-center scroll-animate">Nossos <span class="highlight">Produtos</span></h2>
+                <p class="text-center scroll-animate" style="max-width: 800px; margin: -2rem auto 4rem; color: var(--color-text-secondary);">
+                    não vendemos apenas Equipamentos de Proteção Individual — oferecemos segurança, confiança e eficiência para o seu negócio. 
+                    Cada produto que você adquire conosco vem acompanhado de soluções pensadas
+                    para facilitar sua rotina e garantir que sua equipe esteja sempre protegida e em conformidade com as normas.
+                </p><br><br>
+
+                <div class="feature-content scroll-animate" section id="cabeça">
+
+                    <video video autoplay loop muted width="400" height="400" >
+                        <source src="antichamas capuz.mp4" type="video/mp4">
+                    </video>
+
+                    <div class="feature-text">
+
+                        <h2 class="section-title text-center scroll-animate"> Proteção para <span class="highlight"> Cabeça</span></h2>
+
+                        <p> 
+                            Nossos equipamentos de proteção para a cabeça são desenvolvidos para resistir a impactos,
+                            altas temperaturas e ambientes de risco, garantindo conforto e durabilidade. Seja em áreas industriais,
+                            construção civil ou trabalhos com solda, oferecemos soluções que atendem às normas técnicas e protegem o que é mais importante: a vida.
+                        </p>
+
+                        <ul class="feature-list">
+                            <li><svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>Melhor Qualidade</span></li>
+                            <li><svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>Mais Conforto</span></li>
+                            <li><svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>Segurança Avançada</span></li>
+                            <li><svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>Com C.A. de aprovação</span></li>
+                        </ul>
+
+                    </div>
+
+                </div>
+                
+                <!-- PRODUTOS RELACIONADOS 1 -->
+                <div class="related-products related-products-bg-1 scroll-animate">
+                    <h3 class="subsection-title">Produtos <span class="highlight">Relacionados</span></h3>
+                    <div class="products-grid">
+                        
+                        <div class="product-card scroll-animate">
+                            <img src="nuca1.png">
+
+                            <div class="product-card-content">
+                                <h3>Capuz Soldador TKS 01 – Teknoluvas</h3>
+                                <p>Produzido em brim antichama, costurado com linha de aramida, fechamento em velcro permitindo regulagem e elástico.</p>
+                                <p class="price">R$ 1 </p>
+
+                                <a href="https://consultaca.com/47030"class="btn btn-basto">CA: 47.030</a><br>
+
+                                <button class="btn btn-primary add-to-cart-btn" data-product-id="1" data-product-name="Capuz tks1 / código 123456" 
+                                data-product-price="1" 
+                                data-product-image="https://teknoluvas.com.br/wp-content/uploads/2023/12/capuz_soldador_tks_01_teknoluvas_131_1_7f955598883afbd0fc4622afdac9f4e3_20230823104839.jpg">Adicionar ao Orçamento</button>
+                            </div>
+
+                        </div>
+
+                        <div class="product-card scroll-animate">
+                            <img src="nuca2.png">
+
+                            <div class="product-card-content">
+                                <h3>Capuz Soldador TKS 02 – Teknoluvas</h3>
+                                <p>Produzido em brim antichama, costurado com linha de aramida, fechamento em velcro permitindo regulagem e elástico.</p>
+                                <p class="price">R$ 1 </p>
+                                
+                                <a href="https://consultaca.com/47030"class="btn btn-basto">CA: 47.030</a><br>
+                              
+                                <button class="btn btn-primary add-to-cart-btn" data-product-id="2" data-product-name="Capuz tks2 / código 1233" 
+                                data-product-price="1" 
+                                data-product-image="https://teknoluvas.com.br/wp-content/uploads/2023/12/capuz_soldador_tks_02_teknoluvas_133_1_952bd5247a7c3f75c2de998e05662b23_20230823104840.jpg">Adicionar ao Orçamento</button>
+                            </div>
+
+                        </div>
+
+                        <div class="product-card scroll-animate">
+                            <img src="nuca3.png">
+
+                            <div class="product-card-content">
+                                <h3>Capuz Modelo Tradicional – Teknoluvas</h3>
+                                <p>Serviços que apresentam riscos mecânicos, escoriantes, agentes abrasivos, exposição solar intensa, como trabalhadores rurais.</p>
+                                <p class="price">R$ 1 </p>
+                                
+                                <a href="https://consultaca.com/37348/capuz-ou-balaclava"class="btn btn-basto">CA: 37.348</a><br>
+                              
+                                <button class="btn btn-primary add-to-cart-btn" data-product-id="3" data-product-name="Capuz Modelo Tradicional / código 777777" 
+                                data-product-price="1" 
+                                data-product-image="https://teknoluvas.com.br/wp-content/uploads/2023/12/capuz_para_soldador_modelo_tradicional_teknoluvas_135_1_20230823104841.jpg">Adicionar ao Orçamento</button>
+                            </div>
+
+                        </div>
+
+                        <div class="product-card scroll-animate">
+                            <img src="nuca4.png">
+
+                            <div class="product-card-content">
+                                <h3>TOUCA DE RASPA – TEKNOLUVAS</h3>
+                                <p>Touca para soldador confeccionada em raspa de couro bovino tipo grupon, costurada com algodão ou Kevlar. Possui grande resistência e aderência.</p>
+                                <p class="price">R$ 1 </p>
+                                
+                                <a href="https://consultaca.com"class="btn btn-basto">CA: ISENTO</a><br>
+                              
+                                <button class="btn btn-primary add-to-cart-btn" data-product-id="4" data-product-name="TOUCA DE RASPA / código 88888" 
+                                data-product-price="1" 
+                                data-product-image="https://teknoluvas.com.br/wp-content/uploads/2023/12/1.jpg">Adicionar ao Orçamento</button>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ============================================= -->
+        <!--                 FEATURE SECTION 2             -->
+        <!-- ============================================= -->
+        <section id="tronco" class="feature-section alt-bg section-padding">
+            <div class="container">
+                <div class="feature-content reverse scroll-animate">
+
+                    <video video autoplay loop muted width="400" height="400" >
+                        <source src="antichamas blusa.mp4" type="video/mp4">
+                    </video>
+
+                    <div class="feature-text">
+
+                        <h2 class="section-title text-center scroll-animate"> Proteção para <span class="highlight"> Tronco</span></h2>
+
+                        <p>Transformamos sua visão de varejo em uma loja online cativante e de alta conversão. Focamos em uma experiência de usuário impecável, desde a navegação intuitiva até um processo de checkout seguro e simplificado.</p>
+                        <ul class="feature-list">
+                            <li><svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>Checkout Otimizado</span></li>
+                            <li><svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>Design 100% Responsivo</span></li>
+                            <li><svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>Gestão de Inventário</span></li>
+                            <li><svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>Marketing Integrado</span></li>
+                        </ul>
+
+                    </div>
+
+                </div>
+
+                <!-- PRODUTOS RELACIONADOS 2 -->
+                <div class="related-products related-products-bg-2 scroll-animate">
+                    <h3 class="subsection-title">Produtos <span class="highlight">Relacionados</span></h3>
+
+                    <div class="products-grid">
+
+                        <div class="product-card scroll-animate">
+
+                            <img src="peito1.png">
+
+                            <div class="product-card-content">
+                                <h3>Capuz Soldador TKS 01 – Teknoluvas</h3>
+                                <p>Produzido em brim antichama, costurado com linha de aramida, fechamento em velcro permitindo regulagem e elástico.</p>
+                                <p class="price">R$ 1 </p>
+
+                                <a href="https://consultaca.com/47030"class="btn btn-basto">CA: 47.030</a><br>
+
+                                <button class="btn btn-primary add-to-cart-btn" data-product-id="5" data-product-name="Loja Virtual Premium" data-product-price="1" 
+                                data-product-image="">Adicionar ao Orçamento</button>
+                            </div>
+
+                        </div>
+
+                        <div class="product-card scroll-animate">
+
+                            <img src="peito2.png">
+
+                            <div class="product-card-content">
+
+                                <h3>Capuz Soldador TKS 01 – Teknoluvas</h3>
+                                <p>Produzido em brim antichama, costurado com linha de aramida, fechamento em velcro permitindo regulagem e elástico.</p>
+                                <p class="price">R$ 1 </p>
+
+                                <a href="https://consultaca.com/47030"class="btn btn-basto">CA: 47.030</a><br>
+
+                                <button class="btn btn-primary add-to-cart-btn" data-product-id="6" data-product-name="Marketplace Solution" data-product-price="1" 
+                                data-product-image="">Adicionar ao Orçamento</button>
+                            </div>
+
+                        </div>
+
+                        <div class="product-card scroll-animate">
+
+                            <img src="peito3.png">
+
+                            <div class="product-card-content">
+                                <h3>Capuz Soldador TKS 01 – Teknoluvas</h3>
+                                <p>Produzido em brim antichama, costurado com linha de aramida, fechamento em velcro permitindo regulagem e elástico.</p>
+                                <p class="price">R$ 1 </p>
+
+                                <a href="https://consultaca.com/47030"class="btn btn-basto">CA: 47.030</a><br>
+
+
+                                <button class="btn btn-primary add-to-cart-btn" data-product-id="7" data-product-name="Sistema de PDV e Estoque" data-product-price="1" 
+                                data-product-image="">Adicionar ao Orçamento</button>
+                            </div>
+
+                        </div>
+
+                        <div class="product-card scroll-animate">
+
+                            <img src="peito4.png">
+
+                            <div class="product-card-content">
+                                <h3>Capuz Soldador TKS 01 – Teknoluvas</h3>
+                                <p>Produzido em brim antichama, costurado com linha de aramida, fechamento em velcro permitindo regulagem e elástico.</p>
+                                <p class="price">R$ 1 </p>
+
+                                <a href="https://consultaca.com/47030"class="btn btn-basto">CA: 47.030</a><br>
+
+
+                                <button class="btn btn-primary add-to-cart-btn" data-product-id="8" data-product-name="App de Compras Mobile" data-product-price="1" 
+                                data-product-image="">Adicionar ao Orçamento</button>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+        
+        <!-- ============================================= -->
+        <!--                 FEATURE SECTION 3             -->
+        <!-- ============================================= -->
+        <section id="web-apps" class="feature-section section-padding">
+            <div class="container">
+
+                <div class="feature-content scroll-animate">
+
+                    <div class="feature-image">
+                        <img src="">
+                    </div>
+
+                    <div class="feature-text">
+                        <h3>Aplicações Web Interativas</h3>
+                        <p>Especializamo-nos na criação de Aplicações de Página Única (SPAs) que oferecem uma experiência de usuário fluida e semelhante à de um aplicativo de desktop. Usando as tecnologias mais recentes, construímos painéis de controle e plataformas sociais que são rápidas e ricas em recursos.</p>
+                        <ul class="feature-list">
+                           <li><svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>Interfaces Reativas</span></li>
+                           <li><svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>Performance Elevada</span></li>
+                           <li><svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>Atualizações em Tempo Real</span></li>
+                           <li><svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>APIs Robustas</span></li>
+                        </ul>
+                    </div>
+
+                </div>
+                <!-- PRODUTOS RELACIONADOS 3 -->
+                <div class="related-products related-products-bg-3 scroll-animate">
+                    <h3 class="subsection-title">Produtos <span class="highlight">Relacionados</span></h3>
+                    <div class="products-grid">
+
+                        <div class="product-card scroll-animate">
+                            <img src="">
+                            <div class="product-card-content"><h3>Plataforma SaaS</h3><p>Lance seu software como serviço com nosso framework escalável e seguro.</p>
+                                <p class="price">R$ 7.900</p>
+                                <button class="btn btn-primary add-to-cart-btn" data-product-id="9" data-product-name="Plataforma SaaS" data-product-price="7900" 
+                                data-product-image="">Adicionar ao Orçamento</button></div>
+                        </div>
+
+                        <div class="product-card scroll-animate">
+                            <img src="">
+                            <div class="product-card-content"><h3>Dashboard Interativo</h3><p>Uma ferramenta poderosa para visualização de dados em tempo real.</p>
+                            <p class="price">R$ 3.500</p>
+                            <button class="btn btn-primary add-to-cart-btn" data-product-id="10" data-product-name="Dashboard Interativo" data-product-price="3500" 
+                            data-product-image="">Adicionar ao Orçamento</button></div>
+                        </div>
+
+                        <div class="product-card scroll-animate">
+                            <img src="">
+                            <div class="product-card-content"><h3>Portal do Cliente</h3><p>Ofereça autoatendimento e suporte 24/7 para seus clientes.</p>
+                            <p class="price">R$ 4.000</p>
+                            <button class="btn btn-primary add-to-cart-btn" data-product-id="11" data-product-name="Portal do Cliente" data-product-price="4000" 
+                            data-product-image="">Adicionar ao Orçamento</button></div>
+                        </div>
+
+                        <div class="product-card scroll-animate">
+                            <img src="">
+                            <div class="product-card-content"><h3>Rede Social Corporativa</h3><p>Conecte seus colaboradores e fortaleça a cultura da sua empresa.</p>
+                            <p class="price">R$ 5.800</p>
+                            <button class="btn btn-primary add-to-cart-btn" data-product-id="12" data-product-name="Rede Social Corporativa" data-product-price="5800" 
+                            data-product-image="">Adicionar ao Orçamento</button></div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+        
+        <!-- ============================================= -->
+        <!--                 FEATURE SECTION 4             -->
+        <!-- ============================================= -->
+        <section id="ia" class="feature-section alt-bg section-padding">
+            <div class="container">
+                <div class="feature-content reverse scroll-animate">
+
+                    <div class="feature-image">
+                        <img src="">
+                    </div>
+
+                    <div class="feature-text">
+                        <h3>Inteligência de Dados e IA</h3>
+                        <p>Desbloqueie o potencial dos seus dados. Criamos soluções de inteligência artificial que transformam informações em vantagem competitiva, com modelos de machine learning para prever tendências, automatizar tarefas e personalizar a experiência do seu cliente.</p>
+                        <ul class="feature-list">
+                           <li><svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>Análise Preditiva</span></li>
+                           <li><svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>Dashboards Inteligentes</span></li>
+                           <li><svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>Modelos de Machine Learning</span></li>
+                           <li><svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>Automação com IA</span></li>
+                        </ul>
+
+                    </div>
+
+                </div>
+
+                <!-- PRODUTOS RELACIONADOS 4 -->
+                <div class="related-products related-products-bg-4 scroll-animate">
+                    <h3 class="subsection-title">Produtos <span class="highlight">Relacionados</span></h3>
+                    <div class="products-grid">
+
+                        <div class="product-card scroll-animate">
+                            <img src="">
+                            <div class="product-card-content"><h3>Motor de Recomendação</h3><p>Personalize a experiência do usuário com sugestões de produtos inteligentes.</p>
+                                <p class="price">R$ 7.500</p>
+                                <button class="btn btn-primary add-to-cart-btn" data-product-id="13" data-product-name="Motor de Recomendação" data-product-price="7500" 
+                                data-product-image="">Adicionar ao Orçamento</button></div>
+                        </div>
+
+                        <div class="product-card scroll-animate">
+                            <img src="">
+                            <div class="product-card-content"><h3>Análise de Sentimento</h3><p>Entenda a opinião dos seus clientes em tempo real a partir de redes sociais e reviews.</p>
+                                <p class="price">R$ 6.000</p>
+                                <button class="btn btn-primary add-to-cart-btn" data-product-id="14" data-product-name="Análise de Sentimento" data-product-price="6000" 
+                                data-product-image="">Adicionar ao Orçamento</button></div>
+                        </div>
+
+                        <div class="product-card scroll-animate">
+                            <img src="" alt="Previsão de Demanda">
+                            <div class="product-card-content"><h3>Previsão de Demanda</h3><p>Otimize seu estoque e logística com previsões de vendas baseadas em IA.</p>
+                                <p class="price">R$ 8.200</p>
+                                <button class="btn btn-primary add-to-cart-btn" data-product-id="15" data-product-name="Previsão de Demanda" data-product-price="8200" 
+                                data-product-image="">Adicionar ao Orçamento</button></div>
+                        </div>
+
+                        <div class="product-card scroll-animate">
+                            <img src="">
+                            <div class="product-card-content"><h3>Chatbot Cognitivo</h3><p>Automatize o atendimento ao cliente com um assistente virtual que aprende e evolui.</p>
+                                <p class="price">R$ 5.900</p>
+                                <button class="btn btn-primary add-to-cart-btn" data-product-id="16" data-product-name="Chatbot Cognitivo" data-product-price="5900" 
+                                data-product-image="">Adicionar ao Orçamento</button></div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ============================================= -->
+        <!--                CAROUSEL SECTION               -->
+        <!-- ============================================= -->
+        <section id="showcase" class="carousel-section">
+
+            <div class="container">
+                <h2 class="section-title text-center scroll-animate">Veja Nossas Soluções em <span class="highlight">Ação</span></h2>
+                <p class="text-center scroll-animate" style="max-width: 700px; margin: -2rem auto 3rem; color: var(--color-text-secondary);">
+                    Navegue pela nossa galeria para ver exemplos de como transformamos ideias em realidade. Cada projeto é uma demonstração do nosso compromisso com a excelência, combinando design intuitivo, tecnologia de ponta e foco total nos resultados do cliente.
+                </p>
+            </div>
+
+            <div class="carousel-container scroll-animate">
+                <div class="carousel-slides">
+
+                    <!-- Slide 1 -->
+                    <div class="carousel-slide">
+                        <img src="">
+                        <div class="carousel-slide-caption">
+                            <h3>Dashboards Interativos para Tomada de Decisão</h3>
+                        </div>
+                    </div>
+
+                    <!-- Slide 2 -->
+                    <div class="carousel-slide">
+                        <img src="">
+                        <div class="carousel-slide-caption">
+                            <h3>Plataformas de E-commerce que Convertem</h3>
+                        </div>
+                    </div>
+
+                    <!-- Slide 3 -->
+                    <div class="carousel-slide">
+                        <img src="">
+                        <div class="carousel-slide-caption">
+                            <h3>Sistemas Corporativos que Otimizam Processos</h3>
+                        </div>
+                    </div>
+
+                    <!-- Slide 4 -->
+                    <div class="carousel-slide">
+                        <img src="">
+                        <div class="carousel-slide-caption">
+                            <h3>Inteligência Artificial para Atendimento ao Cliente</h3>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="carousel-button prev" aria-label="Slide anterior">
+                    <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                </button>
+
+                <button class="carousel-button next" aria-label="Próximo slide">
+                    <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </button>
+
+                <div class="carousel-dots"></div>
+            </div>
+        </section>
+        
+    </main>
+    
+    <!-- ============================================= -->
+    <!--          DRAWER OVERLAY (SHARED)              -->
+    <!-- ============================================= -->
+
+    <div id="drawer-overlay" class="drawer-overlay"></div>
+
+    <!-- ============================================= -->
+    <!--                 BUDGET DRAWER                 -->
+    <!-- ============================================= -->
+    <aside id="cart-drawer" class="drawer" aria-labelledby="cart-heading">
+
+        <div class="drawer-header">
+            <h3 id="cart-heading">Meu Orçamento</h3>
+
+            <button id="cart-close-button" class="drawer-close-button" aria-label="Fechar orçamento">
+                <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            
+        </div>
+        
+        <div class="drawer-body">
+            <ul id="cart-items" class="cart-items">
+                <!-- Itens do orçamento serão inseridos aqui via JS -->
+            </ul>
+             <div class="budget-observations">
+                <label for="budget-observations-textarea" style="font-weight: 600; font-size: 0.875rem; margin-bottom: 0.5rem; display: block;">Observações:</label>
+                <textarea id="budget-observations-textarea" placeholder="Ex: Preciso de customizações, etc."></textarea>
+            </div>
+            <div id="cart-empty-message" class="cart-empty-message" style="display: none;">
+                <p>Seu orçamento está vazio.</p>
+            </div>
+        </div>
+
+        <div class="cart-footer">
+            <div id="guest-info-form">
+                <p style="font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: 1rem;">Preencha seus dados para enviar o orçamento.</p>
+                <div class="form-group">
+                    <label for="guest-name">Nome</label>
+                    <input type="text" id="guest-name" name="guest-name" required>
+                    <div id="guest-name-error" class="form-error-message"></div>
+                </div>
+                 <div class="form-group">
+                    <label for="guest-email">Email</label>
+                    <input type="email" id="guest-email" name="guest-email" required>
+                    <div id="guest-email-error" class="form-error-message"></div>
+                </div>
+                <div class="form-group">
+                    <label for="guest-phone">Telefone (com DDD)</label>
+                    <input type="tel" id="guest-phone" name="guest-phone" required>
+                     <div id="guest-phone-error" class="form-error-message"></div>
+                </div>
+            </div>
+
+            <div class="cart-total">
+                <span>Total</span>
+                <span id="cart-total-price">R$ 0,00</span>
+            </div>
+
+            <button class="btn btn-primary cart-checkout-button">Enviar Orçamento por WhatsApp</button>
+
+        </div>
+    </aside>
+
+    <!-- ============================================= -->
+    <!--                     FOOTER                    -->
+    <!-- ============================================= -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+
+                <!-- Coluna 1: Sobre -->
+                <div class="footer-column">
+                    <a href="#home" class="logo gradient-text">Teknoluvas</a>
+                    <p>Criando experiências digitais inovadoras para impulsionar o seu negócio.</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="Instagram"><svg class="icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Instagram</title><path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126s1.338.935 2.126 1.384c.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.717 2.126-1.384s.935-1.338 1.384-2.126c.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.148-.558-2.913-.306-.789-.717-1.459-1.384-2.126S20.65.935 21.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.056 1.17-.249 1.805-.413 2.227-.217.562-.477.96-.896 1.382-.42.419-.82.679-1.38.896-.423.164-1.057.36-2.227.413-1.266.057-1.646.07-4.85.07s-3.585-.015-4.85-.074c-1.17-.056-1.805-.249-2.227-.413-.562-.217-.96-.477-1.382-.896-.419-.42-.679-.82-1.381-.896-.164-.423-.36-1.057-.413-2.227-.057-1.266-.07-1.646-.07-4.85s.015-3.585.074-4.85c.056-1.17.249-1.805.413-2.227.217-.562.477.96.896-1.382.42-.419.819-.679.896-1.381.423-.164 1.057.36 2.227-.413C8.415 2.176 8.797 2.16 12 2.16zm0 5.48c-2.336 0-4.238 1.902-4.238 4.238s1.902 4.238 4.238 4.238 4.238-1.902 4.238-4.238S14.336 7.64 12 7.64zm0 6.69c-1.365 0-2.468-1.103-2.468-2.468s1.103-2.468 2.468-2.468 2.468 1.103 2.468 2.468-1.103 2.468-2.468 2.468zm4.852-6.52c-.732 0-1.325.593-1.325 1.325s.593 1.325 1.325 1.325 1.325-.593 1.325-1.325-.593-1.325-1.325-1.325z"/></svg></a>
+                        <a href="#" aria-label="Facebook"><svg class="icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Facebook</title><path d="M22.675 0h-21.35C.582 0 0 .582 0 1.325v21.351C0 23.418.582 24 1.325 24H12.82v-9.294H9.692v-3.622h3.128V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12V24h6.116c.742 0 1.325-.582 1.325-1.325V1.325C24 .582 23.418 0 22.675 0z"/></svg></a>
+                        <a href="#" aria-label="WhatsApp"><svg class="icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>WhatsApp</title><path d="M12.061 0C5.425 0 0 5.373 0 12.001c0 2.101.543 4.103 1.58 5.894L.025 24l6.238-1.652a11.956 11.956 0 0 0 5.798 1.502h.002c6.637 0 12.001-5.373 12.001-12.001C24.063 5.373 18.698 0 12.061 0zm0 21.819c-1.895 0-3.695-.53-5.228-1.488l-.376-.223-3.878 1.028 1.045-3.784-.244-.395a9.883 9.883 0 0 1-1.58-5.155c0-5.463 4.465-9.894 9.961-9.894 5.496 0 9.961 4.43 9.961 9.894s-4.465 9.894-9.961 9.894zm5.224-6.878c-.282-.142-1.662-.82-1.92-.914-.258-.094-.446-.142-.633.142-.188.283-.726.914-.89 1.1-.164.185-.328.209-.61.067-.282-.142-1.192-.44-2.27-1.399- .839-.745-1.405-1.662-1.57-1.944-.164-.283-.018-.433.125-.575.129-.129.283-.328.425-.492.143-.164.188-.283.282-.47.094-.188.047-.352-.023-.493-.07-.143-.633-1.523-.868-2.086-.226-.544-.453-.469-.633-.478-.17-.01-.357-.01-.544-.01-.188 0-.493.07-.749.352-.259.283-1.003.98-1.003 2.383s1.026 2.768 1.17 2.953c.142.188 2.015 3.078 4.887 4.314 2.873 1.236 2.873.824 3.397.796.524-.027 1.662-.679 1.897-1.336.236-.656.236-1.218.164-1.336-.072-.12-.259-.186-.541-.328z"/></svg></a>
+                    </div>
+                </div>
+
+                <!-- Coluna 2: Soluções -->
+                <div class="footer-column">
+                    <h4>Soluções</h4>
+                    <ul class="footer-links">
+                        <li><a href="#solucoes">Corporativas</a></li>
+                        <li><a href="#ecommerce">E-commerce</a></li>
+                        <li><a href="#web-apps">Aplicações Web</a></li>
+                        <li><a href="#ia">IA & Dados</a></li>
+                    </ul>
+                </div>
+
+                <!-- Coluna 3: Contato Rápido -->
+                <div class="footer-column">
+                    <h4>Contato Rápido</h4>
+                     <ul class="footer-links">
+                        <li><a href="mailto:contato@teknoluvas.com">contato@teknoluvas.com</a></li>
+                        <li><a href="tel:+5511999998888">+55 (11) 99999-8888</a></li>
+                    </ul>
+                </div>
+
+                <!-- Coluna 4: Newsletter -->
+                <div class="footer-column">
+                    <h4>Fique por Dentro</h4>
+                    <p>Inscreva-se para receber novidades sobre tecnologia e nossas soluções.</p>
+                    <form class="newsletter-form">
+                        <label for="newsletter-email" class="sr-only">Seu e-mail</label>
+                        <input type="email" id="newsletter-email" placeholder="Seu e-mail">
+                        <button type="submit">Inscrever</button>
+                    </form>
+                </div>
+
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2024 Teknoluvas. Todos os direitos reservados.</p>
+            </div>
+
+        </div>
+
+    </footer>
+
+    <script type="module">
+
+            document.addEventListener('DOMContentLoaded', () => {
+            
+            // --- Mobile Menu Logic ---
+            const menuButton = document.getElementById('menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const openIcon = document.getElementById('menu-open-icon');
+            const closeIcon = document.getElementById('menu-close-icon');
+
+            if (menuButton && mobileMenu && openIcon && closeIcon) {
+                menuButton.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('active');
+                    const isActive = mobileMenu.classList.contains('active');
+                    openIcon.style.display = isActive ? 'none' : 'block';
+                    closeIcon.style.display = isActive ? 'block' : 'none';
+                    menuButton.setAttribute('aria-expanded', String(isActive));
+                });
+
+                mobileMenu.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        mobileMenu.classList.remove('active');
+                        openIcon.style.display = 'block';
+                        closeIcon.style.display = 'none';
+                        menuButton.setAttribute('aria-expanded', 'false');
+                    });
+                });
+            }
+
+            // --- Carousel Logic ---
+            const carousel = document.querySelector('.carousel-container');
+            if (carousel) {
+                const slidesContainer = carousel.querySelector('.carousel-slides');
+                const slides = Array.from(carousel.querySelectorAll('.carousel-slide'));
+                const prevButton = carousel.querySelector('.carousel-button.prev');
+                const nextButton = carousel.querySelector('.carousel-button.next');
+                const dotsContainer = carousel.querySelector('.carousel-dots');
+                let currentIndex = 0;
+                const slideCount = slides.length;
+                let autoplayInterval = null;
+
+                if (dotsContainer && slideCount > 0) {
+                    slides.forEach((_, i) => {
+                        const dot = document.createElement('button');
+                        dot.classList.add('carousel-dot');
+                        dot.setAttribute('aria-label', `Ir para o slide ${i + 1}`);
+                        if (i === 0) dot.classList.add('active');
+                        dotsContainer.appendChild(dot);
+                        dot.addEventListener('click', () => {
+                            goToSlide(i);
+                            resetAutoplay();
+                        });
+                    });
+                }
+                
+                const dots = dotsContainer ? Array.from(dotsContainer.querySelectorAll('.carousel-dot')) : [];
+
+                const goToSlide = (index) => {
+                    currentIndex = (index + slideCount) % slideCount;
+                    slidesContainer.style.transform = `translateX(-${currentIndex * 100}%)`;
+                    dots.forEach((dot, i) => dot.classList.toggle('active', i === currentIndex));
+                };
+
+                const nextSlide = () => goToSlide(currentIndex + 1);
+                const startAutoplay = () => {
+                    if (autoplayInterval) clearInterval(autoplayInterval);
+                    autoplayInterval = setInterval(nextSlide, 5000);
+                };
+                const stopAutoplay = () => clearInterval(autoplayInterval);
+                const resetAutoplay = () => {
+                    stopAutoplay();
+                    startAutoplay();
+                };
+
+                nextButton?.addEventListener('click', () => { nextSlide(); resetAutoplay(); });
+                prevButton?.addEventListener('click', () => { goToSlide(currentIndex - 1); resetAutoplay(); });
+                carousel.addEventListener('mouseenter', stopAutoplay);
+                carousel.addEventListener('mouseleave', startAutoplay);
+                startAutoplay();
+            }
+
+            // --- Shared Drawer Logic ---
+            const drawerOverlay = document.getElementById('drawer-overlay');
+            const cartDrawer = document.getElementById('cart-drawer');
+
+            if(drawerOverlay) {
+                drawerOverlay.addEventListener('click', () => {
+                    if (cartDrawer.classList.contains('active')) toggleCart();
+                });
+            }
+
+            // --- Budget (Shopping Cart) Logic ---
+            const cartButton = document.getElementById('cart-button');
+            const cartCloseButton = document.getElementById('cart-close-button');
+            const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
+            const cartItemsContainer = document.getElementById('cart-items');
+            const cartTotalPriceEl = document.getElementById('cart-total-price');
+            const cartBadge = document.getElementById('cart-badge');
+            const cartEmptyMessage = document.getElementById('cart-empty-message');
+            const checkoutButton = document.querySelector('.cart-checkout-button');
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+            const formatCurrency = (value) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
+            
+            const saveCart = () => {
+                localStorage.setItem('cart', JSON.stringify(cart));
+            };
+
+            const toggleCart = () => {
+                cartDrawer.classList.toggle('active');
+                drawerOverlay.classList.toggle('active');
+                document.body.style.overflow = cartDrawer.classList.contains('active') ? 'hidden' : '';
+            };
+
+            const renderCart = () => {
+                cartItemsContainer.innerHTML = '';
+                cartEmptyMessage.style.display = cart.length === 0 ? 'block' : 'none';
+                
+                if (cart.length > 0) {
+                    cart.forEach(item => {
+                        const li = document.createElement('li');
+                        li.classList.add('cart-item');
+                        li.dataset.productId = item.id;
+                        li.innerHTML = `
+                            <img src="${item.image}" alt="${item.name}" class="cart-item-image">
+                            <div class="cart-item-details">
+                                <h4>${item.name}</h4>
+                                <p class="price">${formatCurrency(item.price)}</p>
+                                <div class="cart-item-quantity">
+                                    <button class="quantity-btn decrease-quantity-btn" aria-label="Diminuir quantidade">-</button>
+                                    <span>${item.quantity}</span>
+                                    <button class="quantity-btn increase-quantity-btn" aria-label="Aumentar quantidade">+</button>
+                                </div>
+                            </div>
+                            <div class="cart-item-subtotal">${formatCurrency(item.price * item.quantity)}</div>`;
+                        cartItemsContainer.appendChild(li);
+                    });
+                }
+                updateCartTotal();
+                updateCartBadge();
+                saveCart();
+            };
+            
+            const updateCartTotal = () => {
+                const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+                cartTotalPriceEl.textContent = formatCurrency(total);
+            };
+            
+            const updateCartBadge = () => {
+                const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+                cartBadge.textContent = String(totalItems);
+                cartBadge.classList.toggle('visible', totalItems > 0);
+            };
+
+            addToCartButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const clickedButton = e.currentTarget;
+                    const { productId, productName, productPrice, productImage } = clickedButton.dataset;
+                    
+                    if (!productId || !productName || !productPrice || !productImage) return;
+
+                    // Prevent multiple clicks while animation is running
+                    if (clickedButton.disabled) return;
+
+                    const originalContent = clickedButton.innerHTML;
+                    clickedButton.disabled = true;
+                    
+                    // Visual feedback
+                    clickedButton.innerHTML = `
+                        <span style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; line-height: 1;">
+                            Adicionado
+                            <svg style="width: 1.1rem; height: 1.1rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                        </span>`;
+
+                    // Add to cart logic
+                    const existingItem = cart.find(item => item.id === productId);
+                    if (existingItem) {
+                        existingItem.quantity++;
+                    } else {
+                        cart.push({ id: productId, name: productName, price: parseFloat(productPrice), image: productImage, quantity: 1 });
+                    }
+                    
+                    // Render cart and open drawer
+                    renderCart();
+                    if (!cartDrawer.classList.contains('active')) {
+                        toggleCart();
+                    }
+
+                    // Revert button state after a delay
+                    setTimeout(() => {
+                        clickedButton.innerHTML = originalContent;
+                        clickedButton.disabled = false;
+                    }, 1500);
+                });
+            });
+            
+            cartItemsContainer?.addEventListener('click', (e) => {
+                const cartItemElement = e.target.closest('.cart-item');
+                if (!cartItemElement) return;
+
+                const productId = cartItemElement.dataset.productId;
+                const itemInCart = cart.find(item => item.id === productId);
+                if (!itemInCart) return;
+
+                if (e.target.classList.contains('increase-quantity-btn')) {
+                    itemInCart.quantity++;
+                } else if (e.target.classList.contains('decrease-quantity-btn')) {
+                    itemInCart.quantity--;
+                }
+                
+                if (itemInCart.quantity <= 0) cart = cart.filter(item => item.id !== productId);
+                
+                renderCart();
+            });
+
+            cartButton?.addEventListener('click', toggleCart);
+            cartCloseButton?.addEventListener('click', toggleCart);
+            renderCart(); // Initial render
+
+            // --- Form Validation Logic ---
+            const setError = (inputElement, message) => {
+                const formGroup = inputElement.parentElement;
+                const errorDisplay = formGroup.querySelector('.form-error-message');
+                inputElement.classList.add('invalid');
+                if (errorDisplay) errorDisplay.innerText = message;
+            };
+
+            const clearError = (inputElement) => {
+                const formGroup = inputElement.parentElement;
+                const errorDisplay = formGroup.querySelector('.form-error-message');
+                inputElement.classList.remove('invalid');
+                if (errorDisplay) errorDisplay.innerText = '';
+            };
+            
+            const clearGuestErrors = () => {
+                clearError(document.getElementById('guest-name'));
+                clearError(document.getElementById('guest-email'));
+                clearError(document.getElementById('guest-phone'));
+            }
+            
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    if (cartDrawer.classList.contains('active')) toggleCart();
+                }
+            });
+
+            checkoutButton?.addEventListener('click', async () => {
+                if (cart.length === 0) {
+                    alert('Seu orçamento está vazio!');
+                    return;
+                }
+                clearGuestErrors();
+
+                const whatsappNumber = "5514997201523";
+                
+                const guestNameInput = document.getElementById('guest-name');
+                const guestEmailInput = document.getElementById('guest-email');
+                const guestPhoneInput = document.getElementById('guest-phone');
+                
+                const userName = guestNameInput.value.trim();
+                const userEmail = guestEmailInput.value.trim();
+                const userPhone = guestPhoneInput.value.trim();
+                
+                let isGuestValid = true;
+                if(!userName) {
+                    setError(guestNameInput, 'O nome é obrigatório.');
+                    isGuestValid = false;
+                }
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if(!userEmail || !emailRegex.test(userEmail)) {
+                    setError(guestEmailInput, 'Por favor, insira um e-mail válido.');
+                    isGuestValid = false;
+                }
+                if(!userPhone || userPhone.length < 10) {
+                    setError(guestPhoneInput, 'Telefone inválido (inclua o DDD).');
+                    isGuestValid = false;
+                }
+
+                if (!isGuestValid) return;
+                
+                const productsList = cart.map(item => `- ${item.name} (Qtd: ${item.quantity})`).join('\n');
+                const observations = document.getElementById('budget-observations-textarea').value.trim();
+                const totalValue = cartTotalPriceEl.textContent;
+
+                let message = `Olá! Gostaria de um orçamento para os seguintes itens:\n\n*Produtos:*\n${productsList}\n\n*Total estimado:* ${totalValue}\n\n`;
+
+                if(observations) {
+                    message += `*Observações:*\n${observations}\n\n`;
+                }
+
+                message += `*Meus Dados:*\n- Nome: ${userName}\n- Email: ${userEmail}\n- Telefone: ${userPhone}\n\nAguardando o contato. Obrigado!`;
+                
+                const encodedMessage = encodeURIComponent(message);
+                window.open(`https://wa.me/${whatsappNumber}?text=${encodedMessage}`, '_blank');
+                
+                // Limpa o orçamento após o envio
+                cart = [];
+                renderCart();
+                toggleCart();
+            });
+
+            // --- Lógica da Animação de Rolagem ---
+            const animatedElements = document.querySelectorAll('.scroll-animate');
+            if (animatedElements.length > 0) {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, {
+                    rootMargin: '0px 0px -50px 0px' // Aciona um pouco antes de estar totalmente visível
+                });
+
+                animatedElements.forEach(el => {
+                    observer.observe(el);
+                });
+            }
+        });
+
+    </script>
+
+</body>
+</html>
